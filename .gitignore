@@ -1,4 +1,6 @@
 /server/.venv
 /server/__pycache__
+/server/raw_image
+/server/final_result
 /client/node_modules
 /client/yarn.lock
