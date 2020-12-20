@@ -35,9 +35,11 @@ def get_example():
 def upload():
     try:
         # get request data
-        file_name = secure_filename(request.form.get('file_name'))
+        # file_name = secure_filename(request.form.get('file_name'))
+        file_name = 'te.png'
         file_extension = request.form.get('file_extension')
-
+        # CHANGE FOR WINDOWS
+        os.system("sh clean.sh")
         # save raw image
         print("app.py | upload")
         path = os.getcwd()

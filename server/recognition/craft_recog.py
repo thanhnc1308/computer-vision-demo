@@ -19,7 +19,10 @@ import os
 
 def demo(opt):
     """Open csv file wherein you are going to write the Predicted Words"""
-    data = pd.read_csv('craft_pytorch\\Results\\data.csv')
+    # data = pd.read_csv('craft_pytorch\\Results\\data.csv')
+    current_path = os.getcwd()
+    directory = os.path.join(current_path, 'craft_pytorch/Results/data.csv')
+    data = pd.read_csv(directory)
 
     """ model configuration """
     if 'CTC' in opt["Prediction"]:
@@ -89,8 +92,9 @@ def demo(opt):
             preds_prob = F.softmax(preds, dim=2)
             preds_max_prob, _ = preds_prob.max(dim=2)
             for img_name, pred, pred_max_prob in zip(image_path_list, preds_str, preds_max_prob):
-
-                start = 'craft_pytorch\\CropWords\\'
+                current_path = os.getcwd()
+                start = os.path.join(current_path, 'craft_pytorch/CropWords')
+                # start = 'craft_pytorch\\CropWords\\'
                 path = os.path.relpath(img_name, start)
 
                 folder = os.path.dirname(path)
@@ -220,11 +224,15 @@ def craft_recog():
     # parser.add_argument('--hidden_size', type=int, default=256, help='the size of the LSTM hidden state')
 
     # opt = parser.parse_args()
+    current_path = os.getcwd()
+    directory = os.path.join(current_path, 'craft_pytorch/Results/data.csv')
     opt = {
-        'image_folder' : 'craft_pytorch\\CropWords\\',
+        # 'image_folder' : 'craft_pytorch\\CropWords\\',
+        'image_folder' : os.path.join(current_path, 'craft_pytorch/CropWords'),
         'workers' : 4,
         'batch_size' : 192,
-        'saved_model' : 'craft_pytorch\\weights\\None-VGG-BiLSTM-CTC.pth',
+        # 'saved_model' : 'craft_pytorch\\weights\\None-VGG-BiLSTM-CTC.pth',
+        'saved_model' : os.path.join(current_path, 'craft_pytorch/weights/None-VGG-BiLSTM-CTC.pth'),
         'batch_max_length' : 25,
         'imgH' : 32,
         'imgW' : 100,
