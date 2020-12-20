@@ -24,7 +24,9 @@ export default {
   name: "Demo",
   methods: {
     uploadImage(event) {
-      const URL = "http://localhost:5000/demo";
+      axios.defaults.headers.post['Content-Type'] ='application/json;charset=utf-8';
+      axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
+      const URL = "http://localhost:5000/upload";
 
       let data = new FormData();
       data.append("name", "demo");
@@ -36,9 +38,13 @@ export default {
         },
       };
 
-      axios.put(URL, data, config).then((response) => {
+      axios.post(URL, data, config).then((response) => {
         console.log("image upload response > ", response);
       });
+      // console.log(event);
+      // axios.get("http://localhost:5000/test").then((response) => {
+      //   console.log("response > ", response);
+      // });
     },
   },
 };
