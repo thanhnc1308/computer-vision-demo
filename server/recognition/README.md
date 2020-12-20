@@ -135,7 +135,7 @@ test/word_2.png kills
 test/word_3.png A
 ...
 ```
-2. Modify `--select_data`, `--batch_ratio`, and `opt.character`, see [this issue](https://github.com/clovaai/deep-text-recognition-benchmark/issues/85).
+2. Modify `--select_data`, `--batch_ratio`, and `opt["character"]`, see [this issue](https://github.com/clovaai/deep-text-recognition-benchmark/issues/85).
 
 
 ## Acknowledgements

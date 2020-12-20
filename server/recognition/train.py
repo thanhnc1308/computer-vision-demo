@@ -22,8 +22,8 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 def train(opt):
     """ dataset preparation """
     if not opt.data_filtering_off:
-        print('Filtering the images containing characters which are not in opt.character')
-        print('Filtering the images whose label is longer than opt.batch_max_length')
+        print('Filtering the images containing characters which are not in opt["character"]')
+        print('Filtering the images whose label is longer than opt["batch_max_length"]')
         # see https://github.com/clovaai/deep-text-recognition-benchmark/blob/6593928855fb7abb999a99f428b3e4477d4ae356/dataset.py#L130
 
     opt.select_data = opt.select_data.split('-')
@@ -31,34 +31,34 @@ def train(opt):
     train_dataset = Batch_Balanced_Dataset(opt)
 
     log = open(f'./saved_models/{opt.exp_name}/log_dataset.txt', 'a')
-    AlignCollate_valid = AlignCollate(imgH=opt.imgH, imgW=opt.imgW, keep_ratio_with_pad=opt.PAD)
+    AlignCollate_valid = AlignCollate(imgH=opt["imgH"], imgW=opt["imgW"], keep_ratio_with_pad=opt["PAD"])
     valid_dataset, valid_dataset_log = hierarchical_dataset(root=opt.valid_data, opt=opt)
     valid_loader = torch.utils.data.DataLoader(
-        valid_dataset, batch_size=opt.batch_size,
+        valid_dataset, batch_size=opt["batch_size"],
         shuffle=True,  # 'True' to check training progress with validation function.
-        num_workers=int(opt.workers),
+        num_workers=int(opt["workers"]),
         collate_fn=AlignCollate_valid, pin_memory=True)
     log.write(valid_dataset_log)
     print('-' * 80)
     log.write('-' * 80 + '\n')
     log.close()
-    
-    """ model configuration """
-    if 'CTC' in opt.Prediction:
-        if opt.baiduCTC:
-            converter = CTCLabelConverterForBaiduWarpctc(opt.character)
-        else:
-            converter = CTCLabelConverter(opt.character)
-    else:
-        converter = AttnLabelConverter(opt.character)
-    opt.num_class = len(converter.character)
 
-    if opt.rgb:
-        opt.input_channel = 3
+    """ model configuration """
+    if 'CTC' in opt["Prediction"]:
+        if opt.baiduCTC:
+            converter = CTCLabelConverterForBaiduWarpctc(opt["character"])
+        else:
+            converter = CTCLabelConverter(opt["character"])
+    else:
+        converter = AttnLabelConverter(opt["character"])
+    opt["num_class"] = len(converter.character)
+
+    if opt["rgb"]:
+        opt["input_channel"] = 3
     model = Model(opt)
-    print('model input parameters', opt.imgH, opt.imgW, opt.num_fiducial, opt.input_channel, opt.output_channel,
-          opt.hidden_size, opt.num_class, opt.batch_max_length, opt.Transformation, opt.FeatureExtraction,
-          opt.SequenceModeling, opt.Prediction)
+    print('model input parameters', opt["imgH"], opt["imgW"], opt["num_fiducial"], opt["input_channel"], opt["output_channel"],
+          opt["hidden_size"], opt["num_class"], opt["batch_max_length"], opt["Transformation"], opt["FeatureExtraction"],
+          opt["SequenceModeling"], opt["Prediction"])
 
     # weight initialization
     for name, param in model.named_parameters():
@@ -78,20 +78,20 @@ def train(opt):
     # data parallel for multi-GPU
     model = torch.nn.DataParallel(model).to(device)
     model.train()
-    if opt.saved_model != '':
-        print(f'loading pretrained model from {opt.saved_model}')
+    if opt["saved_model"] != '':
+        print(f'loading pretrained model from {opt["saved_model"]}')
         if opt.FT:
-            model.load_state_dict(torch.load(opt.saved_model), strict=False)
+            model.load_state_dict(torch.load(opt["saved_model"]), strict=False)
         else:
-            model.load_state_dict(torch.load(opt.saved_model))
+            model.load_state_dict(torch.load(opt["saved_model"]))
     print("Model:")
     print(model)
 
     """ setup loss """
-    if 'CTC' in opt.Prediction:
+    if 'CTC' in opt["Prediction"]:
         if opt.baiduCTC:
             # need to install warpctc. see our guideline.
-            from warpctc_pytorch import CTCLoss 
+            from warpctc_pytorch import CTCLoss
             criterion = CTCLoss()
         else:
             criterion = torch.nn.CTCLoss(zero_infinity=True).to(device)
@@ -130,9 +130,9 @@ def train(opt):
 
     """ start training """
     start_iter = 0
-    if opt.saved_model != '':
+    if opt["saved_model"] != '':
         try:
-            start_iter = int(opt.saved_model.split('_')[-1].split('.')[0])
+            start_iter = int(opt["saved_model"].split('_')[-1].split('.')[0])
             print(f'continue to train, start_iter: {start_iter}')
         except:
             pass
@@ -146,10 +146,10 @@ def train(opt):
         # train part
         image_tensors, labels = train_dataset.get_batch()
         image = image_tensors.to(device)
-        text, length = converter.encode(labels, batch_max_length=opt.batch_max_length)
+        text, length = converter.encode(labels, batch_max_length=opt["batch_max_length"])
         batch_size = image.size(0)
 
-        if 'CTC' in opt.Prediction:
+        if 'CTC' in opt["Prediction"]:
             preds = model(image, text)
             preds_size = torch.IntTensor([preds.size(1)] * batch_size)
             if opt.baiduCTC:
@@ -172,7 +172,7 @@ def train(opt):
         loss_avg.add(cost)
 
         # validation part
-        if (iteration + 1) % opt.valInterval == 0 or iteration == 0: # To see training progress, we also conduct validation when 'iteration == 0' 
+        if (iteration + 1) % opt.valInterval == 0 or iteration == 0: # To see training progress, we also conduct validation when 'iteration == 0'
             elapsed_time = time.time() - start_time
             # for log
             with open(f'./saved_models/{opt.exp_name}/log_train.txt', 'a') as log:
@@ -206,7 +206,7 @@ def train(opt):
                 head = f'{"Ground Truth":25s} | {"Prediction":25s} | Confidence Score & T/F'
                 predicted_result_log = f'{dashed_line}\n{head}\n{dashed_line}\n'
                 for gt, pred, confidence in zip(labels[:5], preds[:5], confidence_score[:5]):
-                    if 'Attn' in opt.Prediction:
+                    if 'Attn' in opt["Prediction"]:
                         gt = gt[:gt.find('[s]')]
                         pred = pred[:pred.find('[s]')]
 
@@ -277,16 +277,16 @@ if __name__ == '__main__':
     opt = parser.parse_args()
 
     if not opt.exp_name:
-        opt.exp_name = f'{opt.Transformation}-{opt.FeatureExtraction}-{opt.SequenceModeling}-{opt.Prediction}'
+        opt.exp_name = f'{opt["Transformation"]}-{opt["FeatureExtraction"]}-{opt["SequenceModeling"]}-{opt["Prediction"]}'
         opt.exp_name += f'-Seed{opt.manualSeed}'
         # print(opt.exp_name)
 
     os.makedirs(f'./saved_models/{opt.exp_name}', exist_ok=True)
 
     """ vocab / character number configuration """
-    if opt.sensitive:
-        # opt.character += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-        opt.character = string.printable[:-6]  # same with ASTER setting (use 94 char).
+    if opt["sensitive"]:
+        # opt["character"] += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+        opt["character"] = string.printable[:-6]  # same with ASTER setting (use 94 char).
 
     """ Seed and GPU setting """
     # print("Random Seed: ", opt.manualSeed)
@@ -297,21 +297,21 @@ if __name__ == '__main__':
 
     cudnn.benchmark = True
     cudnn.deterministic = True
-    opt.num_gpu = torch.cuda.device_count()
-    # print('device count', opt.num_gpu)
-    if opt.num_gpu > 1:
+    opt["num_gpu"] = torch.cuda.device_count()
+    # print('device count', opt["num_gpu"])
+    if opt["num_gpu"] > 1:
         print('------ Use multi-GPU setting ------')
         print('if you stuck too long time with multi-GPU setting, try to set --workers 0')
         # check multi-GPU issue https://github.com/clovaai/deep-text-recognition-benchmark/issues/1
-        opt.workers = opt.workers * opt.num_gpu
-        opt.batch_size = opt.batch_size * opt.num_gpu
+        opt["workers"] = opt["workers"] * opt["num_gpu"]
+        opt["batch_size"] = opt["batch_size"] * opt["num_gpu"]
 
         """ previous version
-        print('To equlize batch stats to 1-GPU setting, the batch_size is multiplied with num_gpu and multiplied batch_size is ', opt.batch_size)
-        opt.batch_size = opt.batch_size * opt.num_gpu
+        print('To equlize batch stats to 1-GPU setting, the batch_size is multiplied with num_gpu and multiplied batch_size is ', opt["batch_size"])
+        opt["batch_size"] = opt["batch_size"] * opt["num_gpu"]
         print('To equalize the number of epochs to 1-GPU setting, num_iter is divided with num_gpu by default.')
         If you dont care about it, just commnet out these line.)
-        opt.num_iter = int(opt.num_iter / opt.num_gpu)
+        opt.num_iter = int(opt.num_iter / opt["num_gpu"])
         """
 
     train(opt)

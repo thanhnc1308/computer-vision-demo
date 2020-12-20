@@ -22,31 +22,31 @@ def demo(opt):
     data = pd.read_csv('craft_pytorch\\Results\\data.csv')
 
     """ model configuration """
-    if 'CTC' in opt.Prediction:
-        converter = CTCLabelConverter(opt.character)
+    if 'CTC' in opt["Prediction"]:
+        converter = CTCLabelConverter(opt["character"])
     else:
-        converter = AttnLabelConverter(opt.character)
-    opt.num_class = len(converter.character)
+        converter = AttnLabelConverter(opt["character"])
+    opt["num_class"] = len(converter.character)
 
-    if opt.rgb:
-        opt.input_channel = 3
+    if opt["rgb"]:
+        opt["input_channel"] = 3
     model = Model(opt)
-    print('model input parameters', opt.imgH, opt.imgW, opt.num_fiducial, opt.input_channel, opt.output_channel,
-          opt.hidden_size, opt.num_class, opt.batch_max_length, opt.Transformation, opt.FeatureExtraction,
-          opt.SequenceModeling, opt.Prediction)
+    print('model input parameters', opt["imgH"], opt["imgW"], opt["num_fiducial"], opt["input_channel"], opt["output_channel"],
+          opt["hidden_size"], opt["num_class"], opt["batch_max_length"], opt["Transformation"], opt["FeatureExtraction"],
+          opt["SequenceModeling"], opt["Prediction"])
     model = torch.nn.DataParallel(model).to(device)
 
     # load model
-    print('craft_recog.py | loading pretrained model from %s' % opt.saved_model)
-    model.load_state_dict(torch.load(opt.saved_model, map_location=device))
+    print('craft_recog.py | loading pretrained model from %s' % opt["saved_model"])
+    model.load_state_dict(torch.load(opt["saved_model"], map_location=device))
 
     # prepare data. two demo images from https://github.com/bgshih/crnn#run-demo
-    AlignCollate_demo = AlignCollate(imgH=opt.imgH, imgW=opt.imgW, keep_ratio_with_pad=opt.PAD)
-    demo_data = RawDataset(root=opt.image_folder, opt=opt)  # use RawDataset
+    AlignCollate_demo = AlignCollate(imgH=opt["imgH"], imgW=opt["imgW"], keep_ratio_with_pad=opt["PAD"])
+    demo_data = RawDataset(root=opt["image_folder"], opt=opt)  # use RawDataset
     demo_loader = torch.utils.data.DataLoader(
-        demo_data, batch_size=opt.batch_size,
+        demo_data, batch_size=opt["batch_size"],
         shuffle=False,
-        num_workers=int(opt.workers),
+        num_workers=int(opt["workers"]),
         collate_fn=AlignCollate_demo, pin_memory=True)
 
     print('craft_recog.py | predict')
@@ -61,10 +61,10 @@ def demo(opt):
             batch_size = image_tensors.size(0)
             image = image_tensors.to(device)
             # For max length prediction
-            length_for_pred = torch.IntTensor([opt.batch_max_length] * batch_size).to(device)
-            text_for_pred = torch.LongTensor(batch_size, opt.batch_max_length + 1).fill_(0).to(device)
+            length_for_pred = torch.IntTensor([opt["batch_max_length"]] * batch_size).to(device)
+            text_for_pred = torch.LongTensor(batch_size, opt["batch_max_length"] + 1).fill_(0).to(device)
 
-            if 'CTC' in opt.Prediction:
+            if 'CTC' in opt["Prediction"]:
                 preds = model(image, text_for_pred)
 
                 # Select max probabilty (greedy decoding) then decode index to character
@@ -102,7 +102,7 @@ def demo(opt):
                 txt_file = os.path.join(start, folder, file_name)
 
                 log = open(f'{txt_file}_log_demo_result_vgg.txt', 'a')
-                if 'Attn' in opt.Prediction:
+                if 'Attn' in opt["Prediction"]:
                     pred_EOS = pred.find('[s]')
                     pred = pred[:pred_EOS]  # prune after "end of sentence" token ([s])
                     pred_max_prob = pred_max_prob[:pred_EOS]
@@ -220,7 +220,7 @@ def craft_recog():
     # parser.add_argument('--hidden_size', type=int, default=256, help='the size of the LSTM hidden state')
 
     # opt = parser.parse_args()
-    opt = Map({
+    opt = {
         'image_folder' : 'craft_pytorch\\CropWords\\',
         'workers' : 4,
         'batch_size' : 192,
@@ -240,16 +240,16 @@ def craft_recog():
         'input_channel' : 1,
         'output_channel' : 512,
         'hidden_size' : 256
-    })
+    }
 
     """ vocab / character number configuration """
-    if opt.sensitive:
-        opt.character = string.printable[:-6]  # same with ASTER setting (use 94 char).
+    if opt["sensitive"]:
+        opt["character"] = string.printable[:-6]  # same with ASTER setting (use 94 char).
 
     cudnn.benchmark = True
     cudnn.deterministic = True
-    opt.num_gpu = torch.cuda.device_count()
-    # print (opt.image_folder)
+    opt["num_gpu"] = torch.cuda.device_count()
+    # print (opt["image_folder"])
 
     # pred_words=demo(opt)
     demo(opt)
