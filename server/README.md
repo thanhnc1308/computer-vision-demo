@@ -34,10 +34,11 @@
 
 
 # Util
-rm -f ./craft_pytorch/CropWords/*.jpg
-rm -f ./craft_pytorch/Results/*.jpg
-rm -f ./craft_pytorch/Results/*.txt
-rm -f ./craft_pytorch/CropWords/*.txt
+- rm -f ./craft_pytorch/CropWords/*.jpg
+- rm -f ./craft_pytorch/Results/*.jpg
+- rm -f ./craft_pytorch/Results/*.txt
+- rm -f ./craft_pytorch/CropWords/*.txt
+- rm -f ./ResultFile.txt
 # trained model
 https://drive.google.com/drive/folders/1Z-kbX75Poy0LeSXDHdSx5hX0B5Jd7VPM
 download then copy 2 file into server -> craft_pytorch -> weights

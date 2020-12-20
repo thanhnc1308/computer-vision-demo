@@ -15,6 +15,7 @@ import traceback
 from craft_pytorch import pipeline as p
 from craft_pytorch import crop_words as c
 from recognition import craft_recog as recog
+from craft_pytorch.CropWords import CVTextPosition2Points as finalPrint
 
 app = Flask(__name__)
 cors = CORS(app)
@@ -54,6 +55,7 @@ def upload():
         p.pipeline()
         c.crop_words()
         recog.craft_recog()
+        finalPrint.finalPrint()
 
         # save result
 
