@@ -7,6 +7,7 @@ import os
 import io
 import base64
 from PIL import Image
+import image_reader
 
 
 
@@ -30,34 +31,23 @@ def get_example():
     response = jsonify(message="Simple server is running")
     return response
 
-def load_images_from_folder(folder):
-    images = []
-    for filename in os.listdir(folder):
-        img = cv2.imread(os.path.join(folder,filename))
-        if img is not None:
-            images.append(img)
-    return images
-
-def get_encoded_img(image_path):
-    img = Image.open(image_path, mode='r')
-    img_byte_arr = io.BytesIO()
-    img.save(img_byte_arr, format='PNG')
-    my_encoded_img = base64.encodebytes(img_byte_arr.getvalue()).decode('ascii')
-    return my_encoded_img
-
 @app.route("/upload", methods=["POST"])
 @cross_origin()
 def upload():
     try:
+        # get request data
+        file_name = secure_filename(request.form.get('file_name'))
+        file_extension = request.form.get('file_extension')
+
         # save raw image
         print("app.py | upload")
         path = os.getcwd()
-        raw_image_directory = path + '/raw_image/'
+        raw_image_directory = os.path.join(path, 'raw_image')
         if not os.path.exists(raw_image_directory):
             os.makedirs(raw_image_directory)
-
         f = request.files.get('file')
-        f.save(raw_image_directory + secure_filename(f.filename))
+        raw_path = os.path.join(raw_image_directory, file_name)
+        f.save(raw_path)
 
         # process image
         p.pipeline()
@@ -65,18 +55,20 @@ def upload():
         recog.craft_recog()
 
         # save result
-        final_result_directory = path + '/final_result/'
+        final_result_directory = os.path.join(path, 'final_result')
         if not os.path.exists(final_result_directory):
             os.makedirs(final_result_directory)
-        f.save(os.path.join(final_result_directory, f.filename))
-        result_path = os.path.join(final_result_directory, f.filename)
-        result_image = get_encoded_img(raw_image_directory + secure_filename(f.filename))
+        result_path = os.path.join(final_result_directory, file_name)
+        f.save(result_path)
+        result_image = image_reader.get_encoded_img(result_path)
         return jsonify({
-            "result_image": "data:image/jpeg;base64," + result_image
-        })
+            "result_image": "data:image/" + file_extension + ";base64," + result_image
+        }), 200
     except Exception as e:
-        print('Exception: ')
-        print(e)
+        print('Exception: ' + str(e))
+        return jsonify({
+            'error': str(e)
+        }), 200
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port="5000", debug=True)
