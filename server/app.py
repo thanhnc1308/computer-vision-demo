@@ -10,6 +10,7 @@ from PIL import Image
 import image_reader
 import time
 # import cascade_tab_net
+import traceback
 
 from craft_pytorch import pipeline as p
 from craft_pytorch import crop_words as c
@@ -66,7 +67,7 @@ def upload():
             "result_image": "data:image/" + file_extension + ";base64," + result_image
         }), 200
     except Exception as e:
-        print('Exception: ' + str(e))
+        traceback.print_exc()
         return jsonify({
             'error': str(e)
         }), 200
