@@ -32,9 +32,18 @@
 - gdown "https://drive.google.com/u/0/uc?id=1-QieHkR1Q7CXuBu4fp3rYrvDG9j26eFT"
 - change directory of file in cascade_tab_net.py
 
+<<<<<<< HEAD
 
 # Util
 rm -f ./craft_pytorch/CropWords/*.jpg
 rm -f ./craft_pytorch/Results/*.jpg
 rm -f ./craft_pytorch/Results/*.txt
 rm -f ./craft_pytorch/CropWords/*.txt
+=======
+# trained model
+https://drive.google.com/drive/folders/1Z-kbX75Poy0LeSXDHdSx5hX0B5Jd7VPM
+download then copy 2 file into server -> craft_pytorch -> weights
+
+# create csv file
+create empty file named data.csv in server -> craft_pytorch -> Results
+>>>>>>> 1559e75f671e195441618da83479124d1fd402b5
