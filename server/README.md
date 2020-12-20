@@ -14,3 +14,4 @@
 - pip3 install opencv-python
 - python3 -c "import cv2"
 - pip3 install jsonpickle
+- pip3 install Pillow
