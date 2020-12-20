@@ -4,6 +4,7 @@
 /server/final_result
 /server/models
 /server/mmdetection
+/server/CascadeTabNet
 /client/node_modules
 /client/yarn.lock
 client/package-lock.json

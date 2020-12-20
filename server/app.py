@@ -9,6 +9,7 @@ import base64
 from PIL import Image
 import image_reader
 import time
+# import cascade_tab_net
 
 app = Flask(__name__)
 cors = CORS(app)
@@ -44,14 +45,14 @@ def upload():
         # process image
 
         # save result
-        final_result_directory = os.path.join(path, 'final_result')
-        if not os.path.exists(final_result_directory):
-            os.makedirs(final_result_directory)
-        result_path = os.path.join(final_result_directory, file_name)
-        f.save(result_path)
-        # f.flush()
-        # image_reader.wait_for_file(result_path)
-        result_image = image_reader.get_encoded_img(result_path, file_extension)
+        # final_result_directory = os.path.join(path, 'final_result')
+        # if not os.path.exists(final_result_directory):
+        #     os.makedirs(final_result_directory)
+        # result_path = os.path.join(final_result_directory, file_name)
+        # f.save(result_path)
+        # raw_path = '/home/thanhnc/ICT/ProductListDemo/server/raw_image/Screenshot_from_2020-12-20_10-01-30.png'
+        # cascade_tab_net.show_result(raw_path)
+        result_image = image_reader.get_encoded_img(raw_path, file_extension)
         return jsonify({
             "result_image": "data:image/" + file_extension + ";base64," + result_image
         }), 200
