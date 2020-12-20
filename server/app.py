@@ -8,6 +8,14 @@ import io
 import base64
 from PIL import Image
 
+
+
+# import sys
+# sys.path.insert(0, "E:\HUST\Term9\ComputerVision\Project\computer-vision-demo\server")
+from craft_pytorch import pipeline as p
+from craft_pytorch import crop_words as c
+from recognition import craft_recog as recog
+
 app = Flask(__name__)
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
@@ -42,6 +50,7 @@ def get_encoded_img(image_path):
 def upload():
     try:
         # save raw image
+        print("app.py | upload")
         path = os.getcwd()
         raw_image_directory = path + '/raw_image/'
         if not os.path.exists(raw_image_directory):
@@ -51,6 +60,9 @@ def upload():
         f.save(raw_image_directory + secure_filename(f.filename))
 
         # process image
+        p.pipeline()
+        c.crop_words()
+        recog.craft_recog()
 
         # save result
         final_result_directory = path + '/final_result/'

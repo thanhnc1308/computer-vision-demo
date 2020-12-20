@@ -1,4 +1,4 @@
-"""  
+"""
 Copyright (c) 2019-present NAVER Corp.
 MIT License
 """
@@ -8,7 +8,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from torch.autograd import Variable
-from basenet.vgg16_bn import init_weights
+from craft_pytorch.basenet.vgg16_bn import init_weights
 
 
 class RefineNet(nn.Module):

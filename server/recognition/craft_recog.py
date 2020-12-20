@@ -6,9 +6,9 @@ import torch.backends.cudnn as cudnn
 import torch.utils.data
 import torch.nn.functional as F
 
-from utils import CTCLabelConverter, AttnLabelConverter
-from dataset import RawDataset, AlignCollate
-from model import Model
+from recognition.utils import CTCLabelConverter, AttnLabelConverter
+from recognition.dataset import RawDataset, AlignCollate
+from recognition.model import Model
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 import pandas as pd
@@ -110,7 +110,10 @@ def demo(opt):
             log.close()
 
 
-if __name__ == '__main__':
+# if __name__ == '__main__':
+def craft_recog():
+    print("craft_recog")
+    return 0
     parser = argparse.ArgumentParser()
     parser.add_argument('--image_folder',default = '..\\craft\\CropWords\\', help='path to image_folder which contains text images')
     parser.add_argument('--workers', type=int, help='number of data loading workers', default=4)

@@ -6,9 +6,9 @@ import torch.backends.cudnn as cudnn
 import torch.utils.data
 import torch.nn.functional as F
 
-from utils import CTCLabelConverter, AttnLabelConverter
-from dataset import RawDataset, AlignCollate
-from model import Model
+from recognition.utils import CTCLabelConverter, AttnLabelConverter
+from recognition.dataset import RawDataset, AlignCollate
+from recognition.model import Model
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 
@@ -71,7 +71,7 @@ def demo(opt):
             log = open(f'./log_demo_result.txt', 'a')
             dashed_line = '-' * 80
             head = f'{"image_path":25s}\t{"predicted_labels":25s}\tconfidence score'
-            
+
             print(f'{dashed_line}\n{head}\n{dashed_line}')
             log.write(f'{dashed_line}\n{head}\n{dashed_line}\n')
 
