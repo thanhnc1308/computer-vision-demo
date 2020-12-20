@@ -33,7 +33,11 @@
         <img :src="finalResult" >
       </div>
     </div>
-    <div class="download mt-3 text-center">Download result</div>
+    <div class="download mt-3 text-center">
+      <button @click="download">
+        Download result
+      </button>
+    </div>
   </div>
 </template>
 
@@ -73,6 +77,17 @@ export default {
         me.finalResult = data.result_image;
       });
     },
+    download() {
+      const URL = 'http://localhost:5000/download';
+      // axios.defaults.headers.post['Content-Type'] ='application/json;charset=utf-8';
+      // axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
+      // axios.get(URL).then((response) => {
+      //   console.log("download response > ", response);
+      //   // const data = response.data;
+      // });
+      window.parent.caches.delete("call")
+      window.open(URL, '_blank');
+    }
   },
 };
 </script>

@@ -1,4 +1,4 @@
-from flask import Flask, request, Response, jsonify, send_file
+from flask import Flask, request, Response, jsonify, send_file, current_app, send_from_directory
 from flask_cors import CORS, cross_origin
 import numpy as np
 import cv2
@@ -20,6 +20,7 @@ from craft_pytorch.CropWords import CVTextPosition2Points as finalPrint
 app = Flask(__name__)
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
+app.config['UPLOAD_FOLDER'] = ''
 
 @app.route('/')
 def hello_world():
@@ -75,6 +76,12 @@ def upload():
         return jsonify({
             'error': str(e)
         }), 200
+
+@app.route('/download', methods=['GET', 'POST'])
+@cross_origin()
+def download(filename="ResultFile.txt"):
+    uploads = os.path.join(current_app.root_path, app.config['UPLOAD_FOLDER'])
+    return send_from_directory(directory=uploads, filename=filename)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port="5000", debug=True)
