@@ -1,7 +1,7 @@
 # Installation and run
 
 - python3 -m venv .venv
-- source .venv/bin/activate
+- source .venv/bin/activate //env\Scripts\activate
 - pip3 install -r requirements.txt
 - flask run
 <!-- python -m flask run -->
