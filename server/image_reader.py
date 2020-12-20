@@ -2,9 +2,10 @@ from werkzeug.utils import secure_filename
 import os
 import io
 import base64
-from PIL import Image
+from PIL import Image, ImageFile
 import time
 import cv2
+ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 def is_locked(filepath):
     locked = None
@@ -36,9 +37,9 @@ def load_images_from_folder(folder):
             images.append(img)
     return images
 
-def get_encoded_img(image_path):
+def get_encoded_img(image_path, format):
     img = Image.open(image_path, mode='r')
     img_byte_arr = io.BytesIO()
-    img.save(img_byte_arr, format='PNG')
+    img.save(img_byte_arr, format=format)
     my_encoded_img = base64.encodebytes(img_byte_arr.getvalue()).decode('ascii')
     return my_encoded_img

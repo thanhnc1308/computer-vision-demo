@@ -1,3 +1,4 @@
+addict==2.4.0
 click==7.1.2
 Flask==1.1.2
 Flask-Cors==3.0.9
@@ -5,8 +6,14 @@ itsdangerous==1.1.0
 Jinja2==2.11.2
 jsonpickle==1.4.2
 MarkupSafe==1.1.1
-numpy==1.19.3
+mmcv==1.2.2
+numpy==1.19.4
 opencv-python==4.4.0.46
 Pillow==8.0.1
+PyYAML==5.3.1
 six==1.15.0
+terminaltables==3.1.0
+torch==1.4.0+cu100
+torchvision==0.5.0+cu100
 Werkzeug==1.0.1
+yapf==0.30.0

@@ -49,8 +49,9 @@ def upload():
             os.makedirs(final_result_directory)
         result_path = os.path.join(final_result_directory, file_name)
         f.save(result_path)
-        image_reader.wait_for_file(result_path)
-        result_image = image_reader.get_encoded_img(result_path)
+        # f.flush()
+        # image_reader.wait_for_file(result_path)
+        result_image = image_reader.get_encoded_img(result_path, file_extension)
         return jsonify({
             "result_image": "data:image/" + file_extension + ";base64," + result_image
         }), 200

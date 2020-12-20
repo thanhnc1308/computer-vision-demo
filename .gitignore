@@ -2,6 +2,8 @@
 /server/__pycache__
 /server/raw_image
 /server/final_result
+/server/models
+/server/mmdetection
 /client/node_modules
 /client/yarn.lock
 client/package-lock.json
