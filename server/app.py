@@ -8,6 +8,8 @@ import io
 import base64
 from PIL import Image
 import image_reader
+import time
+# import cascade_tab_net
 
 from craft_pytorch import pipeline as p
 from craft_pytorch import crop_words as c
@@ -46,17 +48,20 @@ def upload():
         f.save(raw_path)
 
         # process image
-        # p.pipeline()
-        # c.crop_words()
+        p.pipeline()
+        c.crop_words()
         recog.craft_recog()
 
         # save result
-        final_result_directory = os.path.join(path, 'final_result')
-        if not os.path.exists(final_result_directory):
-            os.makedirs(final_result_directory)
-        result_path = os.path.join(final_result_directory, file_name)
-        f.save(result_path)
-        result_image = image_reader.get_encoded_img(raw_path)
+
+        # final_result_directory = os.path.join(path, 'final_result')
+        # if not os.path.exists(final_result_directory):
+        #     os.makedirs(final_result_directory)
+        # result_path = os.path.join(final_result_directory, file_name)
+        # f.save(result_path)
+        # raw_path = '/home/thanhnc/ICT/ProductListDemo/server/raw_image/Screenshot_from_2020-12-20_10-01-30.png'
+        # cascade_tab_net.show_result(raw_path)
+        result_image = image_reader.get_encoded_img(raw_path, file_extension)
         return jsonify({
             "result_image": "data:image/" + file_extension + ";base64," + result_image
         }), 200
