@@ -9,10 +9,30 @@
         id="file-input"
       />
     </div>
-    <div class="product-list mt-3 text-center">Product list</div>
-    <div class="text-region mt-3 text-center">Text region</div>
-    <div class="text-box mt-3 text-center">Text box</div>
-    <div class="result mt-3 text-center">Text result</div>
+    <div class="product-list mt-3 text-center">
+      Product list
+      <div>
+        <img :src="finalResult" >
+      </div>
+    </div>
+    <div class="text-region mt-3 text-center">
+      Text region
+      <div>
+        <img :src="finalResult" >
+      </div>
+    </div>
+    <div class="text-box mt-3 text-center">
+      Text box
+      <div>
+        <img :src="finalResult" >
+      </div>
+    </div>
+    <div class="result mt-3 text-center">
+      Text result
+      <div>
+        <img :src="finalResult" >
+      </div>
+    </div>
     <div class="download mt-3 text-center">Download result</div>
   </div>
 </template>
@@ -22,9 +42,17 @@ import axios from 'axios'
 
 export default {
   name: "Demo",
+  data() {
+    return {
+      finalResult: null
+    }
+  },
   methods: {
     uploadImage(event) {
-      const URL = "http://localhost:5000/demo";
+      const me = this;
+      axios.defaults.headers.post['Content-Type'] ='application/json;charset=utf-8';
+      axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
+      const URL = "http://localhost:5000/upload";
 
       let data = new FormData();
       data.append("name", "demo");
@@ -36,8 +64,10 @@ export default {
         },
       };
 
-      axios.put(URL, data, config).then((response) => {
+      axios.post(URL, data, config).then((response) => {
         console.log("image upload response > ", response);
+        const data = response.data;
+        me.finalResult = data.result_image;
       });
     },
   },
