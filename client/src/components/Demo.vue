@@ -55,12 +55,15 @@ export default {
       const URL = "http://localhost:5000/upload";
 
       let data = new FormData();
-      data.append("name", "demo");
-      data.append("file", event.target.files[0]);
+      const file = event.target.files[0],
+        fileExtension = file.name.split('.').pop();
+      data.append("file_name", file.name);
+      data.append("file", file);
+      data.append("file_extension", fileExtension);
 
       let config = {
         header: {
-          "Content-Type": "image/png",
+          "Content-Type": `image/${fileExtension}`,
         },
       };
 
