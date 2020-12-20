@@ -9,10 +9,6 @@ import base64
 from PIL import Image
 import image_reader
 
-
-
-# import sys
-# sys.path.insert(0, "E:\HUST\Term9\ComputerVision\Project\computer-vision-demo\server")
 from craft_pytorch import pipeline as p
 from craft_pytorch import crop_words as c
 from recognition import craft_recog as recog
@@ -50,8 +46,8 @@ def upload():
         f.save(raw_path)
 
         # process image
-        p.pipeline()
-        c.crop_words()
+        # p.pipeline()
+        # c.crop_words()
         recog.craft_recog()
 
         # save result
@@ -60,7 +56,7 @@ def upload():
             os.makedirs(final_result_directory)
         result_path = os.path.join(final_result_directory, file_name)
         f.save(result_path)
-        result_image = image_reader.get_encoded_img(result_path)
+        result_image = image_reader.get_encoded_img(raw_path)
         return jsonify({
             "result_image": "data:image/" + file_extension + ";base64," + result_image
         }), 200

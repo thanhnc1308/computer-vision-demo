@@ -47,7 +47,7 @@ def generate_words(image_name, score_bbox, image):
                 folder = '/'.join(image_name.split('/')[:-1])
 
                 # result dir / CHANGE DIR
-                dir = '.\\CropWords\\'
+                dir = 'craft_pytorch/CropWords/'
 
                 if os.path.isdir(os.path.join(dir + folder)) == False:
                     os.makedirs(os.path.join(dir + folder))
@@ -67,13 +67,11 @@ data = pd.read_csv('craft_pytorch/Results/data.csv')
 
 # folder to crop, must be original
 # start = 'CRAFTImg'
-start = 'testFolder'
+start = 'raw_image'
 
 
 def crop_words():
-    print("crop_words")
-    return 0
-
+    print("crop_words.py | crop_words")
     for image_num in range(data.shape[0]):
         image = cv2.imread(os.path.join(start, data['image_name'][image_num]))
         image_name = data['image_name'][image_num].strip('.jpg')

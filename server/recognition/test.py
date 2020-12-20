@@ -24,7 +24,7 @@ def benchmark_all_eval(model, criterion, converter, opt, calculate_infer_time=Fa
                       'IC13_1015', 'IC15_1811', 'IC15_2077', 'SVTP', 'CUTE80']
 
     # # To easily compute the total accuracy of our paper.
-    # eval_data_list = ['IIIT5k_3000', 'SVT', 'IC03_867', 
+    # eval_data_list = ['IIIT5k_3000', 'SVT', 'IC03_867',
     #                   'IC13_1015', 'IC15_2077', 'SVTP', 'CUTE80']
 
     if calculate_infer_time:
@@ -116,7 +116,7 @@ def validation(model, criterion, evaluation_loader, converter, opt):
             else:
                 _, preds_index = preds.max(2)
             preds_str = converter.decode(preds_index.data, preds_size.data)
-        
+
         else:
             preds = model(image, text_for_pred, is_train=False)
             forward_time = time.time() - start_time
@@ -204,7 +204,7 @@ def test(opt):
     model = torch.nn.DataParallel(model).to(device)
 
     # load model
-    print('loading pretrained model from %s' % opt.saved_model)
+    print('test.py | loading pretrained model from %s' % opt.saved_model)
     model.load_state_dict(torch.load(opt.saved_model, map_location=device))
     opt.exp_name = '_'.join(opt.saved_model.split('/')[1:])
     # print(model)
