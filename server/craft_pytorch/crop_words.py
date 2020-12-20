@@ -63,7 +63,6 @@ def generate_words(image_name, score_bbox, image):
 
 
 # data=pd.read_csv('data.csv')
-data = pd.read_csv('craft_pytorch/Results/data.csv')
 
 # folder to crop, must be original
 # start = 'CRAFTImg'
@@ -72,6 +71,7 @@ start = 'raw_image'
 
 def crop_words():
     print("crop_words.py | crop_words")
+    data = pd.read_csv('craft_pytorch/Results/data.csv')
     for image_num in range(data.shape[0]):
         image = cv2.imread(os.path.join(start, data['image_name'][image_num]))
         image_name = data['image_name'][image_num].strip('.jpg')
