@@ -1,6 +1,8 @@
 <template>
   <div class="demo">
-    <div class="title mt-3 text-center bold">Demo for Computer Vision project</div>
+    <div class="title mt-3 text-center bold">
+      Demo for Computer Vision project
+    </div>
     <div class="upload-image mt-3 text-center">
       <input
         type="file"
@@ -17,59 +19,69 @@
     <div v-if="rawImage !== null" class="product-list mt-3 text-center">
       Original image
       <div class="mt-3">
-        <img :src="rawImage" >
+        <img :src="rawImage" />
       </div>
     </div>
     <div v-if="textRegionImage !== null" class="text-region mt-3 text-center">
       Text region
       <div class="mt-3">
-        <img :src="textRegionImage" >
+        <img :src="textRegionImage" />
       </div>
     </div>
     <div v-if="listTextBoxImage.length > 0" class="text-box mt-3 text-center">
       Text box
-      <div class="text-box-img mt-3" v-for="textBoxImg in listTextBoxImage" :key="textBoxImg.id">
-        <img :src="textBoxImg.src" >
+      <div
+        class="text-box-img mt-3"
+        v-for="textBoxImg in listTextBoxImage"
+        :key="textBoxImg.id"
+      >
+        <img :src="textBoxImg.src" />
       </div>
     </div>
     <div v-show="resultLink !== null" class="mt-3">
       <div class="mt-3 text-center">Text result preview</div>
-      <iframe id="txt-result" ref='txtResult' :src="resultLink" frameborder="0" width="100%" height="100%"></iframe>
+      <iframe
+        id="txt-result"
+        ref="txtResult"
+        :src="resultLink"
+        frameborder="0"
+        width="100%"
+        height="100%"
+      ></iframe>
     </div>
     <div v-if="resultLink !== null" class="download mt-3 text-center">
-      <button class="btn btn-danger" @click="download">
-        Download result
-      </button>
+      <button class="btn btn-danger" @click="download">Download result</button>
     </div>
   </div>
 </template>
 
 <script>
-import axios from 'axios'
+import axios from "axios";
 
 export default {
   name: "Demo",
   data() {
-    this.DOWNLOAD_URL = 'http://localhost:5000/download';
+    this.DOWNLOAD_URL = "http://localhost:5000/download";
 
     return {
       rawImage: null,
       textRegionImage: null,
       finalResult: null,
       resultLink: null,
-      listTextBoxImage: []
-    }
+      listTextBoxImage: [],
+    };
   },
   methods: {
     uploadImage(event) {
       const me = this;
-      axios.defaults.headers.post['Content-Type'] ='application/json;charset=utf-8';
-      axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
+      axios.defaults.headers.post["Content-Type"] =
+        "application/json;charset=utf-8";
+      axios.defaults.headers.post["Access-Control-Allow-Origin"] = "*";
       const URL = "http://localhost:5000/upload";
 
       let data = new FormData();
       const file = event.target.files[0],
-        fileExtension = file.name.split('.').pop();
+        fileExtension = file.name.split(".").pop();
       data.append("file_name", file.name);
       data.append("file", file);
       data.append("file_extension", fileExtension);
@@ -90,32 +102,32 @@ export default {
         me.listTextBoxImage = data.list_text_box_image;
         me.resultLink = me.DOWNLOAD_URL;
 
-        setTimeout(function() {
+        setTimeout(function () {
           me.refreshIframe();
           me.unmask();
-        }, 2000)
+        }, 2000);
       });
     },
     /**
      * reload iframe
      */
     refreshIframe() {
-      const iframe = document.getElementById('txt-result');
+      const iframe = document.getElementById("txt-result");
       // iframe.src = this.DOWNLOAD_URL;
-      iframe.src = 'http://localhost:5000/download';
+      iframe.src = "http://localhost:5000/download";
     },
     download() {
-      window.parent.caches.delete("call")
-      window.open(this.DOWNLOAD_URL, '_blank');
+      window.parent.caches.delete("call");
+      window.open(this.DOWNLOAD_URL, "_blank");
     },
     mask() {
-      const loading = document.getElementById('loading');
-      loading.style.display = 'block';
+      const loading = document.getElementById("loading");
+      loading.style.display = "inline-flex";
     },
     unmask() {
-      const loading = document.getElementById('loading');
-      loading.style.display = 'none';
-    }
+      const loading = document.getElementById("loading");
+      loading.style.display = "none";
+    },
   },
 };
 </script>
@@ -151,9 +163,12 @@ export default {
   width: 171px;
   height: 60px;
   cursor: pointer;
+  margin: auto auto;
+  display: block;
 }
 .file-label {
   cursor: pointer;
+  position: absolute;
   top: 0;
   right: 0;
   left: 0;
@@ -165,11 +180,16 @@ export default {
   color: #495057;
   background-color: #fff;
   border: 1px solid #ced4da;
-  border-radius: .25rem;
+  border-radius: 0.25rem;
   width: 170px;
-  margin: 0 auto;
+  left: 50%;
+  transform: translateX(-50%);
 }
 #loading {
   display: none;
+  position: absolute;
+  top: 14px;
+  left: calc(50% - 20px);
+  z-index: 2;
 }
 </style>
