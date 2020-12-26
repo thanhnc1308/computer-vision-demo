@@ -124,11 +124,8 @@ export default {
         me.textRegionImage = data.text_region_image;
         me.listTextBoxImage = data.list_text_box_image;
         me.resultLink = me.DOWNLOAD_URL;
-
-        setTimeout(function () {
-          me.refreshIframe();
-          me.unmask();
-        }, 2000);
+        me.refreshIframe();
+        me.unmask();
       });
     },
     /**
