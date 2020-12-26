@@ -4,37 +4,37 @@
     <div class="upload-image mt-3 text-center">
       <input
         type="file"
+        class="custom-file-input"
         accept="image/*"
         @change="uploadImage($event)"
         id="file-input"
       />
+      <label class="custom-file-label" for="customFile">Choose file</label>
     </div>
-    <div class="product-list mt-3 text-center">
-      Product list
-      <div>
-        <img :src="finalResult" >
+    <div v-if="rawImage !== null" class="product-list mt-3 text-center">
+      Original image
+      <div class="mt-3">
+        <img :src="rawImage" >
       </div>
     </div>
-    <div class="text-region mt-3 text-center">
+    <div v-if="textRegionImage !== null" class="text-region mt-3 text-center">
       Text region
-      <div>
-        <img :src="finalResult" >
+      <div class="mt-3">
+        <img :src="textRegionImage" >
       </div>
     </div>
-    <div class="text-box mt-3 text-center">
+    <div v-if="listTextBoxImage.length > 0" class="text-box mt-3 text-center">
       Text box
-      <div>
-        <img :src="finalResult" >
+      <div class="text-box-img mt-3" v-for="textBoxImg in listTextBoxImage" :key="textBoxImg.id">
+        <img :src="textBoxImg.src" >
       </div>
     </div>
-    <div class="result mt-3 text-center">
-      Text result
-      <div>
-        <img :src="finalResult" >
-      </div>
+    <div v-show="resultLink !== null" class="mt-3">
+      <div class="mt-3 text-center">Text result preview</div>
+      <iframe id="txt-result" ref='txtResult' :src="resultLink" frameborder="0" width="100%" height="100%"></iframe>
     </div>
-    <div class="download mt-3 text-center">
-      <button @click="download">
+    <div v-if="resultLink !== null" class="download mt-3 text-center">
+      <button class="btn btn-danger" @click="download">
         Download result
       </button>
     </div>
@@ -47,8 +47,14 @@ import axios from 'axios'
 export default {
   name: "Demo",
   data() {
+    this.DOWNLOAD_URL = 'http://localhost:5000/download';
+
     return {
-      finalResult: null
+      rawImage: null,
+      textRegionImage: null,
+      finalResult: null,
+      resultLink: null,
+      listTextBoxImage: []
     }
   },
   methods: {
@@ -74,25 +80,36 @@ export default {
       axios.post(URL, data, config).then((response) => {
         console.log("image upload response > ", response);
         const data = response.data;
-        me.finalResult = data.result_image;
+        me.rawImage = data.raw_image;
+        me.textRegionImage = data.text_region_image;
+        me.listTextBoxImage = data.list_text_box_image;
+        me.resultLink = me.DOWNLOAD_URL;
+
+        setTimeout(function() {
+          me.refreshIframe();
+        }, 1000)
       });
     },
+    /**
+     * reload iframe
+     */
+    refreshIframe() {
+      const iframe = document.getElementById('txt-result');
+      // iframe.src = this.DOWNLOAD_URL;
+      iframe.src = 'http://localhost:5000/download';
+    },
     download() {
-      const URL = 'http://localhost:5000/download';
-      // axios.defaults.headers.post['Content-Type'] ='application/json;charset=utf-8';
-      // axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
-      // axios.get(URL).then((response) => {
-      //   console.log("download response > ", response);
-      //   // const data = response.data;
-      // });
       window.parent.caches.delete("call")
-      window.open(URL, '_blank');
+      window.open(this.DOWNLOAD_URL, '_blank');
     }
   },
 };
 </script>
 
 <style scoped>
+.demo {
+  padding: 3rem;
+}
 .text-center {
   text-align: center;
 }
@@ -104,5 +121,16 @@ export default {
 }
 .title {
   font-size: 30px;
+}
+.upload-image {
+  position: relative;
+}
+.text-box-img {
+  border: 1px solid grey;
+  padding: 1rem;
+}
+#txt-result {
+  text-align: center;
+  min-height: 500px;
 }
 </style>

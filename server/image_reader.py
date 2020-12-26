@@ -43,3 +43,6 @@ def get_encoded_img(image_path, format):
     img.save(img_byte_arr, format='png')
     my_encoded_img = base64.encodebytes(img_byte_arr.getvalue()).decode('ascii')
     return my_encoded_img
+
+def get_return_img(base64, file_extension='jpg'):
+    return "data:image/" + file_extension + ";base64," + base64;

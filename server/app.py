@@ -4,6 +4,8 @@ import numpy as np
 import cv2
 from werkzeug.utils import secure_filename
 import os
+from os import listdir
+from os.path import isfile, join
 import io
 import base64
 from PIL import Image
@@ -11,6 +13,7 @@ import image_reader
 import time
 # import cascade_tab_net
 import traceback
+import uuid
 
 from craft_pytorch import pipeline as p
 from craft_pytorch import crop_words as c
@@ -60,16 +63,34 @@ def upload():
 
         # save result
 
-        # final_result_directory = os.path.join(path, 'final_result')
-        # if not os.path.exists(final_result_directory):
-        #     os.makedirs(final_result_directory)
-        # result_path = os.path.join(final_result_directory, file_name)
-        # f.save(result_path)
-        # raw_path = '/home/thanhnc/ICT/ProductListDemo/server/raw_image/Screenshot_from_2020-12-20_10-01-30.png'
-        # cascade_tab_net.show_result(raw_path)
-        result_image = image_reader.get_encoded_img(raw_path, file_extension)
+        final_result_directory = os.path.join(path, 'final_result')
+        if not os.path.exists(final_result_directory):
+            os.makedirs(final_result_directory)
+        result_path = os.path.join(final_result_directory, file_name)
+
+        # return result
+        raw_image = image_reader.get_encoded_img(raw_path, file_extension)
+
+        text_region_path = os.path.join(path, 'craft_pytorch/Results/res_te.jpg')
+        text_region_image = image_reader.get_encoded_img(text_region_path, 'jpg')
+
+        list_text_box_image = []
+        list_text_box_image_path = os.path.join(path, 'craft_pytorch/CropWords')
+        onlyfiles = [f for f in listdir(list_text_box_image_path) if isfile(join(list_text_box_image_path, f))]
+        for img in onlyfiles:
+            ext = str(img).split('.')[-1]
+            if ext == 'jpg':
+                text_box_image_path = os.path.join(list_text_box_image_path, img)
+                text_box_image = image_reader.get_encoded_img(text_box_image_path, 'jpg')
+                list_text_box_image.append({
+                    "id": uuid.uuid4(),
+                    "src": image_reader.get_return_img(text_box_image)
+                })
+
         return jsonify({
-            "result_image": "data:image/" + file_extension + ";base64," + result_image
+            "raw_image": image_reader.get_return_img(raw_image, file_extension),
+            "text_region_image": image_reader.get_return_img(text_region_image),
+            "list_text_box_image": list_text_box_image
         }), 200
     except Exception as e:
         traceback.print_exc()
