@@ -16,40 +16,63 @@
         <span class="sr-only">Loading...</span>
       </div>
     </div>
-    <div v-if="rawImage !== null" class="product-list mt-3 text-center">
-      Original image
-      <div class="mt-3">
-        <img :src="rawImage" />
+
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+          <div
+            v-if="rawImage !== null"
+            class="text-label product-list mt-3 text-center"
+          >
+            Original image
+            <div class="mt-3">
+              <img :src="rawImage" />
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+          <div v-show="resultLink !== null" class="mt-3">
+            <div class="text-label mt-3 text-center">Text result preview</div>
+            <iframe
+              id="txt-result"
+              ref="txtResult"
+              :src="resultLink"
+              frameborder="0"
+              width="100%"
+              height="100%"
+            ></iframe>
+          </div>
+        </div>
       </div>
     </div>
-    <div v-if="textRegionImage !== null" class="text-region mt-3 text-center">
-      Text region
-      <div class="mt-3">
-        <img :src="textRegionImage" />
-      </div>
-    </div>
-    <div v-if="listTextBoxImage.length > 0" class="text-box mt-3 text-center">
-      Text box
+    <div class="container">
       <div
-        class="text-box-img mt-3"
-        v-for="textBoxImg in listTextBoxImage"
-        :key="textBoxImg.id"
+        v-if="textRegionImage !== null"
+        class="text-label text-region mt-3 text-center"
       >
-        <img :src="textBoxImg.src" />
+        Text region
+        <div class="mt-3">
+          <img :src="textRegionImage" />
+        </div>
       </div>
     </div>
-    <div v-show="resultLink !== null" class="mt-3">
-      <div class="mt-3 text-center">Text result preview</div>
-      <iframe
-        id="txt-result"
-        ref="txtResult"
-        :src="resultLink"
-        frameborder="0"
-        width="100%"
-        height="100%"
-      ></iframe>
+    <div v-if="listTextBoxImage.length > 0" class="container">
+      <div class="text-label text-center">
+        Text box
+      </div>
+      <div
+        class="row text-box mt-3 text-center"
+      >
+        <div
+          class="text-box-img mt-3 mr-3 col-xs-12 col-sm-6 col-md-3 col-lg-3"
+          v-for="textBoxImg in listTextBoxImage"
+          :key="textBoxImg.id"
+        >
+          <img :src="textBoxImg.src" />
+        </div>
+      </div>
     </div>
-    <div v-if="resultLink !== null" class="download mt-3 text-center">
+    <div v-if="resultLink !== null" class="download mt-3 text-center mb-5">
       <button class="btn btn-danger" @click="download">Download result</button>
     </div>
   </div>
@@ -133,9 +156,6 @@ export default {
 </script>
 
 <style scoped>
-.demo {
-  padding: 3rem;
-}
 .text-center {
   text-align: center;
 }
@@ -147,6 +167,11 @@ export default {
 }
 .title {
   font-size: 30px;
+}
+.text-label {
+  font-size: 20px;
+  font-weight: bold;
+  color: cornflowerblue;
 }
 .upload-image {
   position: relative;
