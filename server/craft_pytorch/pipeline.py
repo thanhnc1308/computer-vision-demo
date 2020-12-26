@@ -33,7 +33,7 @@ def str2bool(v):
 
 a_trained_model = 'craft_pytorch/weights/craft_mlt_25k.pth'
 a_text_threshold = 0.5 # bao nhieu % la chu
-a_low_text = 0.05 # dien tich de nhan la ky
+a_low_text = 0.4 # dien tich de nhan la ky
 a_link_threshold = 0.4
 a_cuda = False
 a_canvas_size = 1280
