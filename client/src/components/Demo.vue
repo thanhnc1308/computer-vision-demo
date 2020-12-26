@@ -9,7 +9,10 @@
         @change="uploadImage($event)"
         id="file-input"
       />
-      <label class="custom-file-label" for="customFile">Choose file</label>
+      <label class="file-label">Choose file</label>
+      <div id="loading" class="spinner-border text-danger" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
     </div>
     <div v-if="rawImage !== null" class="product-list mt-3 text-center">
       Original image
@@ -77,6 +80,8 @@ export default {
         },
       };
 
+      me.mask();
+
       axios.post(URL, data, config).then((response) => {
         console.log("image upload response > ", response);
         const data = response.data;
@@ -87,7 +92,8 @@ export default {
 
         setTimeout(function() {
           me.refreshIframe();
-        }, 1000)
+          me.unmask();
+        }, 2000)
       });
     },
     /**
@@ -101,6 +107,14 @@ export default {
     download() {
       window.parent.caches.delete("call")
       window.open(this.DOWNLOAD_URL, '_blank');
+    },
+    mask() {
+      const loading = document.getElementById('loading');
+      loading.style.display = 'block';
+    },
+    unmask() {
+      const loading = document.getElementById('loading');
+      loading.style.display = 'none';
     }
   },
 };
@@ -132,5 +146,30 @@ export default {
 #txt-result {
   text-align: center;
   min-height: 500px;
+}
+#file-input {
+  width: 171px;
+  height: 60px;
+  cursor: pointer;
+}
+.file-label {
+  cursor: pointer;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 1;
+  /* height: calc(1.5em + .75rem + 2px); */
+  padding: 1rem 1.75rem;
+  font-weight: 400;
+  /* line-height: 1.5; */
+  color: #495057;
+  background-color: #fff;
+  border: 1px solid #ced4da;
+  border-radius: .25rem;
+  width: 170px;
+  margin: 0 auto;
+}
+#loading {
+  display: none;
 }
 </style>
