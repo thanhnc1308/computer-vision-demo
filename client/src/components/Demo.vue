@@ -87,7 +87,7 @@ export default {
 
         setTimeout(function() {
           me.refreshIframe();
-        }, 1000)
+        }, 2000)
       });
     },
     /**

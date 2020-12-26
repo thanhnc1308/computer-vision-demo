@@ -13,8 +13,8 @@ import image_reader
 import time
 # import cascade_tab_net
 import traceback
+import platform
 import uuid
-
 from craft_pytorch import pipeline as p
 from craft_pytorch import crop_words as c
 from recognition import craft_recog as recog
@@ -108,7 +108,7 @@ def upload():
 @cross_origin()
 def download(filename="ResultFile.txt"):
     uploads = os.path.join(current_app.root_path, app.config['UPLOAD_FOLDER'])
-    return send_from_directory(directory=uploads, filename=filename)
+    return send_from_directory(directory=uploads, filename=filename, cache_timeout=-1)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port="5000", debug=True)
