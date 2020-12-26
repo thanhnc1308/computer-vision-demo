@@ -43,8 +43,14 @@ def upload():
         # file_name = secure_filename(request.form.get('file_name'))
         file_name = 'te.png'
         file_extension = request.form.get('file_extension')
+        
         # CHANGE FOR WINDOWS
-        os.system("sh clean.sh")
+        if platform.system() == "Linux":
+            os.system("sh clean.sh")
+        elif platform.system() == "Windows":
+            os.system("clean.bat")
+        
+        
         # save raw image
         print("app.py | upload")
         path = os.getcwd()
