@@ -14,7 +14,7 @@ def printAndSave(*string):
 def finalPrint():
     array = np.array([[1,2,3,4,"initial",5]], dtype=object) #create an array with initial value
     #open file, get x,y coordinate of the top left corner of the word box and the word from result file
-    directory = os.path.join(os.getcwd(), 'craft_pytorch/CropWords')
+    directory = os.path.join(os.getcwd(), 'craft_pytorch', 'CropWords')
     file_directory = os.path.join(directory, 'te.pn_log_demo_result_vgg.txt')
     with open(file_directory) as file: # open file
         for line in file: # read line by line
