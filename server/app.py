@@ -11,6 +11,7 @@ import image_reader
 import time
 # import cascade_tab_net
 import traceback
+import platform
 
 from craft_pytorch import pipeline as p
 from craft_pytorch import crop_words as c
@@ -40,8 +41,14 @@ def upload():
         # file_name = secure_filename(request.form.get('file_name'))
         file_name = 'te.png'
         file_extension = request.form.get('file_extension')
+        
         # CHANGE FOR WINDOWS
-        os.system("sh clean.sh")
+        if platform.system() == "Linux":
+            os.system("sh clean.sh")
+        elif platform.system() == "Windows":
+            os.system("clean.bat")
+        
+        
         # save raw image
         print("app.py | upload")
         path = os.getcwd()
