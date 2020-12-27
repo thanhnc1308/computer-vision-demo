@@ -32,12 +32,12 @@ def str2bool(v):
     return v.lower() in ("yes", "y", "true", "t", "1")
 
 a_trained_model = 'craft_pytorch/weights/craft_mlt_25k.pth'
-a_text_threshold = 0.5 # bao nhieu % la chu
-a_low_text = 0.4 # dien tich de nhan la ky
+a_text_threshold = 0.5 # bao nhieu % la chu / original 0.7
+a_low_text = 0.4 # dien tich de nhan la ky / original 0.4
 a_link_threshold = 0.4
 a_cuda = False
-a_canvas_size = 1280
-a_mag_ratio = 1.5
+a_canvas_size = 1280 # original 1280
+a_mag_ratio = 8 # original 1.5
 a_poly = False
 a_show_time = False
 a_test_folder = 'raw_image'

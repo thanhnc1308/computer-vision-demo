@@ -47,8 +47,10 @@ def upload():
         # CHANGE FOR WINDOWS
         if platform.system() == "Linux":
             os.system("sh clean.sh")
+            print("app.py | clean.sh")
         elif platform.system() == "Windows":
             os.system("clean.bat")
+            print("app.py | clean.bat")
         
         
         # save raw image
