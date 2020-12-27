@@ -232,18 +232,18 @@ def craft_recog():
         'workers' : 4,
         'batch_size' : 192,
         # 'saved_model' : 'craft_pytorch\\weights\\None-VGG-BiLSTM-CTC.pth',
-        'saved_model' : os.path.join(current_path, 'craft_pytorch/weights/None-VGG-BiLSTM-CTC.pth'),
+        'saved_model' : os.path.join(current_path, 'craft_pytorch/weights/None-ResNet-None-CTC.pth'), # original None-VGG-BiLSTM-CTC
         'batch_max_length' : 25,
         'imgH' : 32,
         'imgW' : 100,
         'rgb' : 0,
-        'character' : '0123456789abcdefghijklmnopqrstuvwxyz',
-        'sensitive' : False,
+        'character' : '0123456789abcdefghijklmnopqrstuvwxyz', # original 0123456789abcdefghijklmnopqrstuvwxyz
+        'sensitive' : False, # original False
         'PAD' : False,
-        'Transformation' : 'None',
-        'FeatureExtraction' : 'VGG',
-        'SequenceModeling' : 'BiLSTM',
-        'Prediction' : 'CTC',
+        'Transformation' : 'None', # original None
+        'FeatureExtraction' : 'ResNet', # original VGG
+        'SequenceModeling' : 'None',# original BiLSTM
+        'Prediction' : 'CTC',# original CTC
         'num_fiducial' : 20,
         'input_channel' : 1,
         'output_channel' : 512,
