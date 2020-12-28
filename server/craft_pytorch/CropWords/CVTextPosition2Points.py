@@ -13,6 +13,7 @@ def printAndSave(*string):
 #    print(string1,string2,string3)    
 def finalPrint():
     array = np.array([[1,2,3,4,"initial",5]], dtype=object) #create an array with initial value
+    totalConfidence = 0;
     #open file, get x,y coordinate of the top left corner of the word box and the word from result file
     directory = os.path.join(os.getcwd(), 'craft_pytorch', 'CropWords')
     file_directory = os.path.join(directory, 'te.pn_log_demo_result_vgg.txt')
@@ -23,6 +24,7 @@ def finalPrint():
             b = line.split("\t") #split file name, word, confident
             c = b[0] # file name
             word = b[1]  # get word
+            totalConfidence += float(b[2]) # get confidence of each word
             word = word.strip() #strim word
             d = c.split("_") #split file name by underscore (FILE NAME MUST NOT HAVE UNDERSCORE)
             e = d[1]    #get x coordinate of the top left corner of the box
@@ -115,5 +117,7 @@ def finalPrint():
                 printAndSave(' ' * arrayElement[0]*xCoefficient,arrayElement[4])
     #print(arrayElement[2])
         index+=1
-        
+    totalConfidence = totalConfidence / index # divide to get the whole text confidence
+    totalConfidence = str(round(totalConfidence,2))
+    return totalConfidence
 

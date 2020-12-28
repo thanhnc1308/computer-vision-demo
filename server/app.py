@@ -67,7 +67,7 @@ def upload():
         p.pipeline()
         c.crop_words()
         recog.craft_recog()
-        finalPrint.finalPrint()
+        textConfidence = finalPrint.finalPrint()
 
         # save result
 
@@ -98,7 +98,8 @@ def upload():
         return jsonify({
             "raw_image": image_reader.get_return_img(raw_image, file_extension),
             "text_region_image": image_reader.get_return_img(text_region_image),
-            "list_text_box_image": list_text_box_image
+            "list_text_box_image": list_text_box_image,
+            "textConfidence": textConfidence
         }), 200
     except Exception as e:
         traceback.print_exc()

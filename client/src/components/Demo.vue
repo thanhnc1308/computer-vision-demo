@@ -45,6 +45,17 @@
         </div>
       </div>
     </div>
+	<div class="container">
+      <div
+        v-if="textConfidence !== null"
+        class="text-label text-region mt-3 text-center"
+      >
+        Text Confidence
+        <div class="text-confidence">
+		{{textConfidence}}
+        </div>
+      </div>
+    </div>
     <div class="container">
       <div
         v-if="textRegionImage !== null"
@@ -92,6 +103,7 @@ export default {
       finalResult: null,
       resultLink: null,
       listTextBoxImage: [],
+      textConfidence: null,
     };
   },
   methods: {
@@ -123,6 +135,7 @@ export default {
         me.rawImage = data.raw_image;
         me.textRegionImage = data.text_region_image;
         me.listTextBoxImage = data.list_text_box_image;
+		me.textConfidence = data.textConfidence;
         me.resultLink = me.DOWNLOAD_URL;
         me.refreshIframe();
         me.unmask();
@@ -187,6 +200,9 @@ export default {
   cursor: pointer;
   margin: auto auto;
   display: block;
+}
+.text-confidence{
+  color: black;
 }
 .file-label {
   cursor: pointer;
