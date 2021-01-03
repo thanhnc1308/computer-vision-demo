@@ -19,8 +19,6 @@ def finalPrint():
     file_directory = os.path.join(directory, 'te.pn_log_demo_result_vgg.txt')
     with open(file_directory) as file: # open file
         for line in file: # read line by line
-            #print("new line  ")
-            #print(line)
             b = line.split("\t") #split file name, word, confident
             c = b[0] # file name
             word = b[1]  # get word

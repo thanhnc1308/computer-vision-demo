@@ -227,27 +227,25 @@ def craft_recog():
     current_path = os.getcwd()
     directory = os.path.join(current_path, 'craft_pytorch/Results/data.csv')
     opt = {
-        # 'image_folder' : 'craft_pytorch\\CropWords\\',
-        'image_folder' : os.path.join(current_path, 'craft_pytorch/CropWords'),
-        'workers' : 4,
-        'batch_size' : 192,
-        # 'saved_model' : 'craft_pytorch\\weights\\None-VGG-BiLSTM-CTC.pth',
-        'saved_model' : os.path.join(current_path, 'craft_pytorch/weights/TPS-ResNet-BiLSTM-Attn-case-sensitive.pth'), # original None-VGG-BiLSTM-CTC
-        'batch_max_length' : 25,
-        'imgH' : 32,
-        'imgW' : 100,
-        'rgb' : 0,
-        'character' : '0123456789abcdefghijklmnopqrstuvwxyz', # original 0123456789abcdefghijklmnopqrstuvwxyz
-        'sensitive' : True, # original False
-        'PAD' : False,
-        'Transformation' : 'TPS', # original None
-        'FeatureExtraction' : 'ResNet', # original VGG
-        'SequenceModeling' : 'BiLSTM',# original BiLSTM
-        'Prediction' : 'Attn',# original CTC
-        'num_fiducial' : 20,
-        'input_channel' : 1,
-        'output_channel' : 512,
-        'hidden_size' : 256
+        'image_folder' : os.path.join(current_path, 'craft_pytorch/CropWords'), #path to image_folder which contains cropped images
+        'workers' : 4, #number of data loading workers
+        'batch_size' : 192, #input batch size
+        'saved_model' : os.path.join(current_path, 'craft_pytorch/weights/TPS-ResNet-BiLSTM-Attn-case-sensitive.pth'), #path to saved_model to evaluation
+        'batch_max_length' : 25, #maximum-label-length
+        'imgH' : 32, #the height of the input image
+        'imgW' : 100, #the width of the input image
+        'rgb' : 0, #use rgb input
+        'character' : '0123456789abcdefghijklmnopqrstuvwxyz', #character label
+        'sensitive' : True, #for sensitive character mode
+        'PAD' : False, #whether to keep ratio then pad for image resize
+        'Transformation' : 'TPS', #Transformation stage. None|TPS
+        'FeatureExtraction' : 'ResNet', #FeatureExtraction stage. VGG|RCNN|ResNet
+        'SequenceModeling' : 'BiLSTM', #SequenceModeling stage. None|BiLSTM
+        'Prediction' : 'Attn', #Prediction stage. CTC|Attn
+        'num_fiducial' : 20, #number of fiducial points of TPS-STN
+        'input_channel' : 1, #the number of input channel of Feature extractor
+        'output_channel' : 512, #the number of output channel of Feature extractor
+        'hidden_size' : 256 #the size of the LSTM hidden state
     }
 
     """ vocab / character number configuration """
