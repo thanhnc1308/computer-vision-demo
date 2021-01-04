@@ -4,8 +4,6 @@ import cv2
 import pandas as pd
 
 
-# from google.colab.patches import cv2_imshow
-
 def crop(pts, image):
     """
     Takes inputs as 8 points
@@ -61,11 +59,6 @@ def generate_words(image_name, score_bbox, image):
                 except:
                     continue
 
-
-# data=pd.read_csv('data.csv')
-
-# folder to crop, must be original
-# start = 'CRAFTImg'
 start = 'raw_image'
 
 
