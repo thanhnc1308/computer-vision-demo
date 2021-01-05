@@ -45,17 +45,6 @@
         </div>
       </div>
     </div>
-	<div class="container">
-      <div
-        v-if="textConfidence !== null"
-        class="text-label text-region mt-3 text-center"
-      >
-        Text Confidence
-        <div class="text-confidence">
-		{{textConfidence}}
-        </div>
-      </div>
-    </div>
     <div class="container">
       <div
         v-if="textRegionImage !== null"
