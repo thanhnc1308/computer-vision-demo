@@ -4,6 +4,10 @@
 /server/final_result
 /server/models
 /server/mmdetection
+/server/craft_pytorch/Results/data.csv
+/server/yolov3_training_last.weights
+/server/*.weights
+/server/Test
 /server/CascadeTabNet
 /client/node_modules
 /client/yarn.lock

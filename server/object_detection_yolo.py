@@ -5,20 +5,19 @@ import random
 
 
 # Load Yolo
-modelConfiguration = "yolov3_testing.cfg"
-modelWeights = "yolov3_training_last_2.weights"
+modelConfiguration = "yolov4_testing.cfg"
+modelWeights = "yolov4_training_last.weights"
 net = cv2.dnn.readNet(modelConfiguration,modelWeights)
 net.setPreferableBackend(cv2.dnn.DNN_BACKEND_OPENCV)
 net.setPreferableTarget(cv2.dnn.DNN_TARGET_CPU)
 
 # Name custom object
 classes = []
-with open("coco.names", "r") as f:
+with open("classes.names", "r") as f:
      classes = [line.strip() for line in f.readlines()]
 # Images path
-images_path = glob.glob(r"Test\*png")
-
-
+images_path = glob.glob('Test/*.png')
+print(images_path)
 
 layer_names = net.getLayerNames()
 output_layers = [layer_names[i[0] - 1] for i in net.getUnconnectedOutLayers()]
