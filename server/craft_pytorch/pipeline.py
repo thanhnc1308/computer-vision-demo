@@ -31,18 +31,18 @@ from collections import OrderedDict
 def str2bool(v):
     return v.lower() in ("yes", "y", "true", "t", "1")
 
-a_trained_model = 'craft_pytorch/weights/craft_mlt_25k.pth'
-a_text_threshold = 0.5 # bao nhieu % la chu / original 0.7
-a_low_text = 0.4 # dien tich de nhan la ky / original 0.4
-a_link_threshold = 0.4
-a_cuda = False
-a_canvas_size = 1280 # original 1280
-a_mag_ratio = 8 # original 1.5
-a_poly = False
-a_show_time = False
-a_test_folder = 'raw_image'
-a_refine = False
-a_refiner_model = 'craft_pytorch/weights/craft_refiner_CTW1500.pth'
+a_trained_model = 'craft_pytorch/weights/craft_mlt_25k.pth' # pretrained model
+a_text_threshold = 0.5 # bao nhieu % la chu / original 0.7 # text confidence threshold
+a_low_text = 0.4 # dien tich de nhan la ky / original 0.4 # text low-bound score
+a_link_threshold = 0.4 # link confidence threshold
+a_cuda = False # Use cuda for inference
+a_canvas_size = 1280 # image size for inference
+a_mag_ratio = 8 # original 1.5 / image magnification ratio
+a_poly = False # enable polygon type
+a_show_time = False # show processing time
+a_test_folder = 'raw_image' # folder path to input images
+a_refine = False # enable link refiner
+a_refiner_model = 'craft_pytorch/weights/craft_refiner_CTW1500.pth' # pretrained refiner model
 
 """ For test images in a folder """
 image_list, _, _ = file_utils.get_files(a_test_folder)
