@@ -56,13 +56,21 @@
         </div>
       </div>
     </div>
-    <div v-if="listTextBoxImage.length > 0" class="container">
-      <div class="text-label text-center">
-        Text box
-      </div>
+    <div class="container">
       <div
-        class="row text-box mt-3 text-center"
+        v-if="yoloImage !== null"
+        class="text-label text-region mt-3 text-center"
       >
+        Tabular region
+        <div class="mt-3">
+          <img :src="yoloImage" />
+        </div>
+      </div>
+    </div>
+
+    <div v-if="listTextBoxImage.length > 0" class="container">
+      <div class="text-label text-center">Text box</div>
+      <div class="row text-box mt-3 text-center">
         <div
           class="text-box-img mt-3 mr-3 col-xs-12 col-sm-6 col-md-3 col-lg-3"
           v-for="textBoxImg in listTextBoxImage"
@@ -89,6 +97,7 @@ export default {
     return {
       rawImage: null,
       textRegionImage: null,
+      yoloImage: null,
       finalResult: null,
       resultLink: null,
       listTextBoxImage: [],
@@ -123,8 +132,9 @@ export default {
         const data = response.data;
         me.rawImage = data.raw_image;
         me.textRegionImage = data.text_region_image;
+        me.yoloImage = data.yolo_image;
         me.listTextBoxImage = data.list_text_box_image;
-		me.textConfidence = data.textConfidence;
+        me.textConfidence = data.textConfidence;
         me.resultLink = me.DOWNLOAD_URL;
         me.refreshIframe();
         me.unmask();
@@ -190,7 +200,7 @@ export default {
   margin: auto auto;
   display: block;
 }
-.text-confidence{
+.text-confidence {
   color: black;
 }
 .file-label {

@@ -19,6 +19,7 @@ from craft_pytorch import pipeline as p
 from craft_pytorch import crop_words as c
 from recognition import craft_recog as recog
 from craft_pytorch.CropWords import CVTextPosition2Points as finalPrint
+import object_detection_yolo
 
 app = Flask(__name__)
 cors = CORS(app)
@@ -64,6 +65,7 @@ def upload():
         f.save(raw_path)
 
         # process image
+        object_detection_yolo.yolo_v4()
         p.pipeline()
         c.crop_words()
         recog.craft_recog()
@@ -78,6 +80,9 @@ def upload():
 
         # return result
         raw_image = image_reader.get_encoded_img(raw_path, file_extension)
+
+        yolo_path = os.path.join(path, 'yolo', 'yolo_result.png')
+        yolo_image = image_reader.get_encoded_img(yolo_path, 'jpg')
 
         text_region_path = os.path.join(path, 'craft_pytorch/Results/res_te.jpg')
         text_region_image = image_reader.get_encoded_img(text_region_path, 'jpg')
@@ -98,6 +103,7 @@ def upload():
         return jsonify({
             "raw_image": image_reader.get_return_img(raw_image, file_extension),
             "text_region_image": image_reader.get_return_img(text_region_image),
+            "yolo_image": image_reader.get_return_img(yolo_image),
             "list_text_box_image": list_text_box_image,
             "textConfidence": textConfidence
         }), 200

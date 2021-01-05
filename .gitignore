@@ -8,6 +8,7 @@
 /server/yolov3_training_last.weights
 /server/*.weights
 /server/Test
+/server/yolo
 /server/CascadeTabNet
 /client/node_modules
 /client/yarn.lock
